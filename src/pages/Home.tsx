@@ -32,7 +32,28 @@ const list = [
 ];
 
 const Home = () => {
-  return <div>{/*todo (3-1) post 목록 작성*/}</div>;
+  const [posts, setPosts] = useState<IResponsePostList>([]);
+
+  const fetchPostList = async () => {
+    const { data } = await getPostList();
+    setPosts(data);
+  }
+
+  useEffect(() => {
+    fetchPostList();
+  }, []);
+
+  if (posts.length === 0) {
+    return <NoPostList />;
+  }
+
+  return (
+    <div>
+      {posts.map((item) =>
+        <PostListItem key={item.post.id} {...item.post}></PostListItem>
+      )}
+    </div>
+  );
 };
 
 export default Home;
